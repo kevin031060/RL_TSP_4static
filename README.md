@@ -1,5 +1,7 @@
-# RL_TSP_4static
-## The code is heavy. 
+# Using Deep Reinforcement Learning method and Attention model to solve the Multiobjectve TSP. 
+## This code is the model with four-dimension input (Euclidean-type).
+### The model with three-dimension input (Mixed-type) is in the RL_3static_MOTSP.zip.
+### Matlab code for visualzing and comparisons in the paper is in the MOTSP_compare_EMO.zip.
 
 + Trained model is available in the tsp_transfer_... dirs.
 + To test the model, use the load_all_rewards in Post_process dir.
