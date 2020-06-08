@@ -3,7 +3,17 @@ import os
 from model import DRL4TSP, Encoder
 import argparse
 from tasks import motsp
-from trainer_motsp import StateCritic
+from trainer_motsp_transfer import StateCritic
+
+'''
+This file is used to test. It has been obsoleted
+This file is used to convert the trained single-TSP PN model to the parameters from which we can transfer.
+The trained single-TSP PN model can be found here: https://github.com/mveres01/pytorch-drl4vrp. Save it as "tsp20".
+Then the start-up parameters for the first subproblem of the MOTSP to transfer can be obtained.
+'''
+
+
+
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 STATIC_SIZE_original = 2  # (x, y)
 STATIC_SIZE = 3  # (x, y)

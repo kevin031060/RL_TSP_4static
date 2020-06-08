@@ -384,7 +384,7 @@ if __name__ == '__main__':
     # parser.add_argument('--checkpoint', default="tsp/20/w_1_0/20_06_30.888074")
     parser.add_argument('--test', action='store_true', default=False)
     parser.add_argument('--task', default='tsp')
-    parser.add_argument('--nodes', dest='num_nodes', default=20, type=int)
+    parser.add_argument('--nodes', dest='num_nodes', default=40, type=int)
     parser.add_argument('--actor_lr', default=5e-4, type=float)
     parser.add_argument('--critic_lr', default=5e-4, type=float)
     parser.add_argument('--max_grad_norm', default=2., type=float)
@@ -392,18 +392,16 @@ if __name__ == '__main__':
     parser.add_argument('--hidden', dest='hidden_size', default=128, type=int)
     parser.add_argument('--dropout', default=0.1, type=float)
     parser.add_argument('--layers', dest='num_layers', default=1, type=int)
-    parser.add_argument('--train-size',default=300000, type=int)
+    parser.add_argument('--train-size',default=500000, type=int)
     parser.add_argument('--valid-size', default=1000, type=int)
 
     args = parser.parse_args()
 
-    #print('NOTE: SETTTING CHECKPOINT: ')
-    #args.checkpoint = os.path.join('vrp', '10', '12_59_47.350165' + os.path.sep)
-    #print(args.checkpoint)
+    # Trained without transfer
 
     if args.task == 'tsp':
         w2_list = np.arange(101)/100
-        for i in range(50,51):
+        for i in range(0,101):
             print("Current w:%2.2f/%2.2f"% (1-w2_list[i], w2_list[i]))
             train_tsp(args, 1-w2_list[i], w2_list[i], None)
 

@@ -147,7 +147,7 @@ def train(actor, critic, w1, w2, task, num_nodes, train_data, valid_data, reward
     best_params = None
     best_reward = np.inf
     start_total = time.time()
-    for epoch in range(5):
+    for epoch in range(3):
         print("epoch %d start:"% epoch)
         actor.train()
         critic.train()
@@ -376,7 +376,7 @@ def train_vrp(args):
 
 
 if __name__ == '__main__':
-    num_nodes = 20
+    num_nodes = 100
     parser = argparse.ArgumentParser(description='Combinatorial Optimization')
     parser.add_argument('--seed', default=12345, type=int)
     # parser.add_argument('--checkpoint', default="tsp/20/w_1_0/20_06_30.888074")
@@ -390,28 +390,25 @@ if __name__ == '__main__':
     parser.add_argument('--hidden', dest='hidden_size', default=128, type=int)
     parser.add_argument('--dropout', default=0.1, type=float)
     parser.add_argument('--layers', dest='num_layers', default=1, type=int)
-    parser.add_argument('--train-size',default=500000, type=int)
+    parser.add_argument('--train-size',default=120000, type=int)
     parser.add_argument('--valid-size', default=1000, type=int)
 
     args = parser.parse_args()
 
-    #print('NOTE: SETTTING CHECKPOINT: ')
-    #args.checkpoint = os.path.join('vrp', '10', '12_59_47.350165' + os.path.sep)
-    #print(args.checkpoint)
+
     T = 100
     if args.task == 'tsp':
         w2_list = np.arange(T+1)/T
-        for i in range(11,T+1):
+        for i in range(0,T+1):
             print("Current w:%2.2f/%2.2f"% (1-w2_list[i], w2_list[i]))
             if i==0:
-                # checkpoint = 'modified_checkpoint_3obj'
-                checkpoint = 'tsp_4static/20/w_1.00_0.00'
+                # The first subproblem can be trained from scratch. It also can be trained based on a
+                # single-TSP trained model, where the model can be obtained from everywhere in github
+                checkpoint = 'tsp_transfer_100run_500000_5epoch_40city/40/w_1.00_0.00'
                 train_tsp(args, 1, 0, checkpoint)
             else:
+                # Parameter transfer. train based on the parameters of the previous subproblem
                 checkpoint = 'tsp_transfer/%d/w_%2.2f_%2.2f'%(num_nodes, 1-w2_list[i-1], w2_list[i-1])
                 train_tsp(args, 1-w2_list[i], w2_list[i], checkpoint)
 
-    elif args.task == 'vrp':
-        train_vrp(args)
-    else:
-        raise ValueError('Task <%s> not understood'%args.task)
+
