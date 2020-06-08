@@ -3,7 +3,7 @@ from tasks import motsp
 from tasks.motsp import TSPDataset, reward
 from torch.utils.data import DataLoader
 from model import DRL4TSP
-from trainer_motsp import StateCritic
+from trainer_motsp_transfer import StateCritic
 import numpy as np
 import os
 import matplotlib.pyplot as plt
@@ -11,11 +11,13 @@ import scipy.io as scio
 from Post_process.dis_matrix import dis_matrix
 import time
 
+# Load the trained model and convert the obtained Pareto Front to the .mat file.
+# It is convenient to visualize it in matlab
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 # "../tsp_transfer_100run_500000_5epoch_20city/20"效果一般。应该再训练一遍
-# save_dir = "../tsp_transfer_100run_500000_5epoch_40city/40"
-save_dir = "../tsp_transfer/100"
+save_dir = "../tsp_transfer_100run_500000_5epoch_40city/40"
+# save_dir = "../tsp_transfer/100"
 # param
 update_fn = None
 STATIC_SIZE = 4  # (x, y)
@@ -85,11 +87,14 @@ plt.figure()
 plt.plot(objs[:,0],objs[:,1],"ro")
 plt.show()
 
+# Convert to .mat
 obj1_matrix, obj2_matrix = dis_matrix(static, STATIC_SIZE)
 scio.savemat("data/obj1_%d_%d.mat"%(STATIC_SIZE, D), {'obj1':obj1_matrix})
 scio.savemat("data/obj2_%d_%d.mat"%(STATIC_SIZE, D), {'obj2':obj2_matrix})
 scio.savemat("data/rl%d_%d.mat"%(STATIC_SIZE, D),{'rl':objs})
 scio.savemat("data/tour%d_%d.mat"%(STATIC_SIZE, D),{'tour':np.array(tours)})
+
+
 # from load_test_plot import show
 # show_if = 1
 # if show_if:
